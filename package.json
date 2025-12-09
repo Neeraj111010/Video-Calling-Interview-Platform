@@ -1,0 +1,22 @@
+{
+  "name": "video-calling-platform-mern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm start start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neeraj111010/Video-Calling-Interview-Platform.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Neeraj111010/Video-Calling-Interview-Platform/issues"
+  },
+  "homepage": "https://github.com/Neeraj111010/Video-Calling-Interview-Platform#readme"
+}
