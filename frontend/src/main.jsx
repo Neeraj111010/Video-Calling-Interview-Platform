@@ -1,21 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { ClerkProvider } from '@clerk/clerk-react'
+import './App.css'
+import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton } from '@clerk/clerk-react'
 
+function App() {
+  return (
+    <>
+    <h1>Welcome to the app</h1>
+    <SignedOut>
+    <SignInButton mode='modal'/>
+    <button className=''>Login</button>
+    </SignedOut>
+    <SignedIn>
+        <SignOutButton/>
+    </SignedIn>
 
-// Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error('Missing Clerk Publishable Key')
+    <UserButton/>
+    </>
+  )
 }
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <App />
-      </ClerkProvider>
-  </StrictMode>,
-)
+export default App
