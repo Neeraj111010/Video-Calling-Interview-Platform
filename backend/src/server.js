@@ -4,8 +4,8 @@ import path from "path"
 import { ENV } from "./lib/env.js"
 import { connectDb } from "./lib/db.js"
 import cors from "cors"
-import {serve} from "inngest"
-import { inngest } from "./lib/inngest.js"
+import {serve} from "inngest/express"
+import { inngest,functions} from "./lib/inngest.js"
 
 dotenv.config()
 const app=express()
