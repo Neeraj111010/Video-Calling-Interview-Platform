@@ -3,12 +3,23 @@ import dotenv from "dotenv"
 import path from "path"
 import { ENV } from "./lib/env.js"
 import { connectDb } from "./lib/db.js"
+import cors from "cors"
+import {serve} from "inngest"
+import { inngest } from "./lib/inngest.js"
 
 dotenv.config()
 const app=express()
 
+console.log("DB_URL:", process.env.DB_URL);
 
 const _dirname=path.resolve()
+
+//middleware
+app.use(express.json())
+//credentials true meaning ??=>server allows a browser to include cookies on request
+app.use(cors({origin:ENV.CLIENT_URL,credentials:true}))
+
+app.use("/api/inngest",serve({client:inngest,functions}))
 
 app.get("/health",(req,res)=>{
     res.status(200).json({msg:"Success from api 1"})
