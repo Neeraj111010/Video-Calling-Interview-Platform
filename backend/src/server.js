@@ -7,6 +7,8 @@ import cors from "cors"
 import {serve} from "inngest/express"
 import { inngest,functions} from "./lib/inngest.js"
 import chatRoutes from "./routes/chatRoutes.js"
+import sessionRoutes from "./routes/sessionRoutes.js"
+import { protectRoute } from "./middlewares/protectRoute.js"
 
 dotenv.config()
 const app=express()
@@ -21,6 +23,8 @@ app.use(express.json())
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}))
 
 app.use("/api/inngest",serve({client:inngest,functions}))
+app.use("/api/chat",chatRoutes)
+app.use("/api/sessions",sessionRoutes)
 
 app.get("/health",(req,res)=>{
     res.status(200).json({msg:"Success from api 1"})
