@@ -6,6 +6,7 @@ import { connectDB } from "./lib/db.js"
 import cors from "cors"
 import {serve} from "inngest/express"
 import { inngest,functions} from "./lib/inngest.js"
+import chatRoutes from "./routes/chatRoutes.js"
 
 dotenv.config()
 const app=express()
@@ -28,6 +29,11 @@ app.get("/health",(req,res)=>{
 app.get("/books",(req,res)=>{
     res.status(200).json({msg:"Books endpoint"})
 })
+
+app.get("/video-calls",protectRoute,(req,res)=>{
+    res.status(200).json({msg:"this is a protected route"})
+})
+
 
 
 //make our app ready for development
