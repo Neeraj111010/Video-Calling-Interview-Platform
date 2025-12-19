@@ -25,9 +25,9 @@ app.use(express.json())
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}))
 app.use(clerkMiddleware()); 
 
-app.use("/api/inngest",serve({client:inngest,functions}))
-app.use("/api/chat",chatRoutes)
-app.use("/api/sessions",sessionRoutes)
+app.use("/inngest",serve({client:inngest,functions}))
+app.use("/chat",chatRoutes)
+app.use("/sessions",sessionRoutes)
 
 app.get("/health",(req,res)=>{
     res.status(200).json({msg:"Success from api 1"})
@@ -62,4 +62,5 @@ const startServer=async()=>{
  }
 
  startServer()
+
 
