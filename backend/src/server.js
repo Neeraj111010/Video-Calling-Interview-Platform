@@ -9,6 +9,9 @@ import { inngest, functions } from "./lib/inngest.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import { protectRoute } from "./middlewares/protectRoute.js";
+import { serve } from "inngest/express";
+import { clerkMiddleware } from "@clerk/express";
+
 
 dotenv.config();
 const app = express();
@@ -21,6 +24,7 @@ const _dirname=path.resolve()
 app.use(express.json())
 //credentials true meaning ??=>server allows a browser to include cookies on request
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}))
+app.use(clerkMiddleware()); 
 
 app.use("/api/inngest",serve({client:inngest,functions}))
 app.use("/api/chat",chatRoutes)
@@ -59,3 +63,4 @@ const startServer=async()=>{
  }
 
  startServer()
+
