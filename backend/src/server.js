@@ -44,7 +44,7 @@ app.get("/video-calls",protectRoute,(req,res)=>{
 
 
 //make our app ready for development
-if(ENV.NODE_ENV === "development"){
+if(ENV.NODE_ENV === "production"){
     app.use(express.static(path.join(_dirname,"../frontend/dist")))
 
     app.get("/{*any}",(req,res)=>{
