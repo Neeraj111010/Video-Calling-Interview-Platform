@@ -4,7 +4,6 @@ import path from "path";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import cors from "cors";
-import { serve } from "inngest/express";
 import { inngest, functions } from "./lib/inngest.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
@@ -26,9 +25,9 @@ app.use(express.json())
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}))
 app.use(clerkMiddleware()); 
 
-app.use("/api/inngest",serve({client:inngest,functions}))
-app.use("/api/chat",chatRoutes)
-app.use("/api/sessions",sessionRoutes)
+app.use("/inngest",serve({client:inngest,functions}))
+app.use("/chat",chatRoutes)
+app.use("/sessions",sessionRoutes)
 
 app.get("/health",(req,res)=>{
     res.status(200).json({msg:"Success from api 1"})
@@ -45,7 +44,7 @@ app.get("/video-calls",protectRoute,(req,res)=>{
 
 
 //make our app ready for development
-if(ENV.NODE_ENV === "production"){
+if(ENV.NODE_ENV === "development"){
     app.use(express.static(path.join(_dirname,"../frontend/dist")))
 
     app.get("/{*any}",(req,res)=>{
@@ -63,4 +62,5 @@ const startServer=async()=>{
  }
 
  startServer()
+
 
