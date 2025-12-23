@@ -1,66 +1,50 @@
 import express from "express";
-import dotenv from "dotenv";
 import path from "path";
-import { ENV } from "./lib/env.js";
-import { connectDB } from "./lib/db.js";
 import cors from "cors";
-import { inngest, functions } from "./lib/inngest.js";
-import chatRoutes from "./routes/chatRoutes.js";
-import sessionRoutes from "./routes/sessionRoutes.js";
-import { protectRoute } from "./middlewares/protectRoute.js";
 import { serve } from "inngest/express";
 import { clerkMiddleware } from "@clerk/express";
 
+import { ENV } from "./lib/env.js";
+import { connectDB } from "./lib/db.js";
+import { inngest, functions } from "./lib/inngest.js";
 
-dotenv.config();
+import chatRoutes from "./routes/chatRoutes.js";
+import sessionRoutes from "./routes/sessionRoutes.js";
+
 const app = express();
 
-console.log("DB_URL:", process.env.DB_URL);
+const __dirname = path.resolve();
 
-const _dirname=path.resolve()
+// middleware
+app.use(express.json());
+// credentials:true meaning?? => server allows a browser to include cookies on request
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
+app.use(clerkMiddleware()); // this adds auth field to request object: req.auth()
 
-//middleware
-app.use(express.json())
-//credentials true meaning ??=>server allows a browser to include cookies on request
-app.use(cors({origin:ENV.CLIENT_URL,credentials:true}))
-app.use(clerkMiddleware()); 
+app.use("/api/inngest", serve({ client: inngest, functions }));
+app.use("/api/chat", chatRoutes);
+app.use("/api/sessions", sessionRoutes);
 
-app.use("/inngest",serve({client:inngest,functions}))
-app.use("/chat",chatRoutes)
-app.use("/sessions",sessionRoutes)
+app.get("/health", (req, res) => {
+  res.status(200).json({ msg: "api is up and running" });
+});
 
-app.get("/health",(req,res)=>{
-    res.status(200).json({msg:"Success from api 1"})
-})
+// make our app ready for deployment
+if (ENV.NODE_ENV === "development") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-app.get("/books",(req,res)=>{
-    res.status(200).json({msg:"Books endpoint"})
-})
-
-app.get("/video-calls",protectRoute,(req,res)=>{
-    res.status(200).json({msg:"this is a protected route"})
-})
-
-
-
-//make our app ready for development
-if(ENV.NODE_ENV === "development"){
-    app.use(express.static(path.join(_dirname,"../frontend/dist")))
-
-    app.get("/{*any}",(req,res)=>{
-        res.sendFile(path.join(_dirname,"../frontend","dist","index.html"))
-    })
+  app.get("/{*any}", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
 }
-const startServer=async()=>{
-    try {
-        await connectDB()
-        app.listen(ENV.PORT,()=>
-    console.log("Server is running on port:",ENV.PORT))
-    } catch (error) {
-        console.error('Error starting the server',error)
-    }
- }
 
- startServer()
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
+  } catch (error) {
+    console.error("💥 Error starting the server", error);
+  }
+};
 
-
+startServer();

@@ -33,4 +33,3 @@ export const deleteStreamUser=async(userId)=>{
     }
 }
 
-//todo another method to generatetoken

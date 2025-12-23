@@ -34,8 +34,6 @@ export async function createSession(req, res) {
 
     await channel.create();
 
-    console.log("Session created:", session._id); // ✅ log session id
-
     res.status(201).json({ session });
   } catch (error) {
     console.log("Error in createSession controller:", error.message);

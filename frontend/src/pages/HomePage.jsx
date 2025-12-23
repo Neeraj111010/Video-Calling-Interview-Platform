@@ -29,7 +29,9 @@ function HomePage() {
               <span className="font-black text-xl bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent font-mono tracking-wider">
                 Talent IQ
               </span>
-              <span className="text-xs text-base-content/60 font-medium -mt-1">Code Together</span>
+              <span className="text-xs text-base-content/60 font-medium -mt-1">
+                Code Together
+              </span>
             </div>
           </Link>
 
@@ -62,8 +64,9 @@ function HomePage() {
             </h1>
 
             <p className="text-xl text-base-content/70 leading-relaxed max-w-xl">
-              The ultimate platform for collaborative coding interviews and pair programming.
-              Connect face-to-face, code in real-time, and ace your technical interviews.
+              The ultimate platform for collaborative coding interviews and pair
+              programming. Connect face-to-face, code in real-time, and ace your
+              technical interviews.
             </p>
 
             {/* FEATURE PILLS */}
@@ -98,18 +101,26 @@ function HomePage() {
             </div>
 
             {/* STATS */}
-            <div className="stats stats-vertical lg:stats-horizontal bg-base-100 shadow-lg">
-              <div className="stat">
-                <div className="stat-value text-primary">10K+</div>
-                <div className="stat-title">Active Users</div>
-              </div>
-              <div className="stat">
-                <div className="stat-value text-secondary">50K+</div>
-                <div className="stat-title">Sessions</div>
-              </div>
-              <div className="stat">
-                <div className="stat-value text-accent">99.9%</div>
-                <div className="stat-title">Uptime</div>
+            <div className="flex w-full lg:w-auto justify-center lg:justify-start">
+              <div className="stats stats-vertical lg:stats-horizontal bg-base-100 shadow-lg w-full max-w-full lg:w-auto lg:max-w-none">
+                <div className="stat flex flex-row items-center justify-between lg:flex-col lg:items-start">
+                  <div className="stat-value text-primary">10K+</div>
+                  <div className="stat-title text-sm lg:text-xs text-right lg:text-left">
+                    Active Users
+                  </div>
+                </div>
+                <div className="stat flex flex-row items-center justify-between lg:flex-col lg:items-start">
+                  <div className="stat-value text-secondary">50K+</div>
+                  <div className="stat-title text-sm lg:text-xs text-right lg:text-left">
+                    Sessions
+                  </div>
+                </div>
+                <div className="stat flex flex-row items-center justify-between lg:flex-col lg:items-start">
+                  <div className="stat-value text-accent">99.9%</div>
+                  <div className="stat-title text-sm lg:text-xs text-right lg:text-left">
+                    Uptime
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -127,10 +138,12 @@ function HomePage() {
       <div className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
-            Everything You Need to <span className="text-primary font-mono">Succeed</span>
+            Everything You Need to{" "}
+            <span className="text-primary font-mono">Succeed</span>
           </h2>
           <p className="text-lg text-base-content/70 max-w-2xl mx-auto">
-            Powerful features designed to make your coding interviews seamless and productive
+            Powerful features designed to make your coding interviews seamless
+            and productive
           </p>
         </div>
 
@@ -144,7 +157,8 @@ function HomePage() {
               </div>
               <h3 className="card-title">HD Video Call</h3>
               <p className="text-base-content/70">
-                Crystal clear video and audio for seamless communication during interviews
+                Crystal clear video and audio for seamless communication during
+                interviews
               </p>
             </div>
           </div>
@@ -157,7 +171,8 @@ function HomePage() {
               </div>
               <h3 className="card-title">Live Code Editor</h3>
               <p className="text-base-content/70">
-                Collaborate in real-time with syntax highlighting and multiple language support
+                Collaborate in real-time with syntax highlighting and multiple
+                language support
               </p>
             </div>
           </div>
@@ -170,7 +185,8 @@ function HomePage() {
               </div>
               <h3 className="card-title">Easy Collaboration</h3>
               <p className="text-base-content/70">
-                Share your screen, discuss solutions, and learn from each other in real-time
+                Share your screen, discuss solutions, and learn from each other
+                in real-time
               </p>
             </div>
           </div>

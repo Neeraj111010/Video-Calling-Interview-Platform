@@ -3,12 +3,12 @@ import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
 import { useActiveSessions, useCreateSession, useMyRecentSessions } from "../hooks/useSession.js";
 
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.jsx";
 import WelcomeSection from "../components/WelcomeSection.jsx";
 import StatsCards from "../components/StatsCards.jsx";
 import ActiveSessions from "../components/ActiveSessions.jsx";
 import RecentSessions from "../components/RecentSessions.jsx";
-import CreateSessionModel from "../components/CreateSessionModel.jsx";
+import CreateSessionModal from "../components/CreateSessionModel.jsx";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -24,10 +24,6 @@ function DashboardPage() {
   const handleCreateRoom = () => {
     if (!roomConfig.problem || !roomConfig.difficulty) return;
 
-    // Add this line to check the API URL
-    console.log("API URL:", import.meta.env.VITE_API_URL);
-
-
     createSessionMutation.mutate(
       {
         problem: roomConfig.problem,
@@ -35,7 +31,6 @@ function DashboardPage() {
       },
       {
         onSuccess: (data) => {
-              console.log("Create session response:", data); // ✅ log backend response
           setShowCreateModal(false);
           navigate(`/session/${data.session._id}`);
         },
@@ -76,7 +71,7 @@ function DashboardPage() {
         </div>
       </div>
 
-      <CreateSessionModel
+      <CreateSessionModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         roomConfig={roomConfig}
