@@ -1,31 +1,46 @@
-import { StreamChat } from "stream-chat";
-import { StreamClient } from "@stream-io/node-sdk";
-import { ENV } from "./env.js";
+import { Inngest } from "inngest";
+import { connectDB } from "./db.js";
+import User from "../models/User.js";
+import { deleteStreamUser, upsertStreamUser } from "./stream.js";
 
-const apiKey = ENV.STREAM_API_KEY;
-const apiSecret = ENV.STREAM_API_SECRET;
+export const inngest = new Inngest({ id: "talent-iq1" });
 
-if (!apiKey || !apiSecret) {
-  console.error("STREAM_API_KEY or STREAM_API_SECRET is missing");
-}
+const syncUser = inngest.createFunction(
+  { id: "sync-user" },
+  { event: "clerk/user.created" },
+  async ({ event }) => {
+    await connectDB();
 
-export const chatClient = StreamChat.getInstance(apiKey, apiSecret); // will be used chat features
-export const streamClient = new StreamClient(apiKey, apiSecret); // will be used for video calls
+    const { id, email_addresses, first_name, last_name, image_url } = event.data;
 
-export const upsertStreamUser = async (userData) => {
-  try {
-    await chatClient.upsertUser(userData);
-    console.log("Stream user upserted successfully:", userData);
-  } catch (error) {
-    console.error("Error upserting Stream user:", error);
+    const newUser = {
+      clerkId: id,
+      email: email_addresses[0]?.email_address,
+      name: `${first_name || ""} ${last_name || ""}`,
+      profileImage: image_url,
+    };
+
+    await User.create(newUser);
+
+    await upsertStreamUser({
+      id: newUser.clerkId.toString(),
+      name: newUser.name,
+      image: newUser.profileImage,
+    });
   }
-};
+);
 
-export const deleteStreamUser = async (userId) => {
-  try {
-    await chatClient.deleteUser(userId);
-    console.log("Stream user deleted successfully:", userId);
-  } catch (error) {
-    console.error("Error deleting the Stream user:", error);
+const deleteUserFromDB = inngest.createFunction(
+  { id: "delete-user-from-db" },
+  { event: "clerk/user.deleted" },
+  async ({ event }) => {
+    await connectDB();
+
+    const { id } = event.data;
+    await User.deleteOne({ clerkId: id });
+
+    await deleteStreamUser(id.toString());
   }
-};
+);
+
+export const functions = [syncUser, deleteUserFromDB];
