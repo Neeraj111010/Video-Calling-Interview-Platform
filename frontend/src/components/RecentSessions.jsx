@@ -1,5 +1,5 @@
 import { Code2, Clock, Users, Trophy, Loader } from "lucide-react";
-import { getDifficultyBadgeClass } from "../lib/utils";
+import { getDifficultyBadgeClass } from "../lib/utils.js";
 import { formatDistanceToNow } from "date-fns";
 
 function RecentSessions({ sessions, isLoading }) {
