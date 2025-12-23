@@ -1,67 +1,31 @@
-import { Inngest } from "inngest";
-import { connectDB } from "./db.js";
-import User from "../models/User.js";
-import { deleteStreamUser, upsertStreamUser } from "./stream.js";
+import { StreamChat } from "stream-chat";
+import { StreamClient } from "@stream-io/node-sdk";
+import { ENV } from "./env.js";
 
-export const inngest = new Inngest({ id: "talent-iq1" });
+const apiKey = ENV.STREAM_API_KEY;
+const apiSecret = ENV.STREAM_API_SECRET;
 
-const syncUser = inngest.createFunction(
-  { id: "sync-user" },
-  { event: "clerk/user.created" },
-  async ({ event, step }) => {
-    await connectDB();
+if (!apiKey || !apiSecret) {
+  console.error("STREAM_API_KEY or STREAM_API_SECRET is missing");
+}
 
-    const { id, email_addresses, first_name, last_name, image_url } = event.data;
+export const chatClient = StreamChat.getInstance(apiKey, apiSecret); // will be used chat features
+export const streamClient = new StreamClient(apiKey, apiSecret); // will be used for video calls
 
-    console.log("📥 Received Clerk data:", {
-      id,
-      email: email_addresses[0]?.email_address,
-      first_name,
-      last_name,
-      image_url
-    });
-
-    const newUser = {
-      clerkId: id,
-      email: email_addresses[0]?.email_address,
-      name: `${first_name || ""} ${last_name || ""}`.trim(),
-      profileImage: image_url,
-    };
-
-    console.log("💾 Creating MongoDB user:", newUser);
-    await User.create(newUser);
-
-    const streamUserData = {
-      id: newUser.clerkId.toString(),
-      name: newUser.name || "User",
-      image: newUser.profileImage || "",
-    };
-
-    console.log("📹 Sending to Stream:", streamUserData);
-    
-    const streamResponse = await upsertStreamUser(streamUserData);
-    
-    console.log("✅ Stream response:", streamResponse);
-    
-    return { success: true, user: newUser, streamResponse };
+export const upsertStreamUser = async (userData) => {
+  try {
+    await chatClient.upsertUser(userData);
+    console.log("Stream user upserted successfully:", userData);
+  } catch (error) {
+    console.error("Error upserting Stream user:", error);
   }
-);
+};
 
-const deleteUserFromDB = inngest.createFunction(
-  { id: "delete-user-from-db" },
-  { event: "clerk/user.deleted" },
-  async ({ event }) => {
-    await connectDB();
-
-    const { id } = event.data;
-    
-    console.log("🗑️ Deleting user:", id);
-    
-    await User.deleteOne({ clerkId: id });
-    await deleteStreamUser(id.toString());
-    
-    console.log("✅ User deleted successfully");
+export const deleteStreamUser = async (userId) => {
+  try {
+    await chatClient.deleteUser(userId);
+    console.log("Stream user deleted successfully:", userId);
+  } catch (error) {
+    console.error("Error deleting the Stream user:", error);
   }
-);
-
-export const functions = [syncUser, deleteUserFromDB];
+};
