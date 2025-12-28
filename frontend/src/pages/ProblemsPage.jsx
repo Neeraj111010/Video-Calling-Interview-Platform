@@ -36,13 +36,15 @@ const ProblemsPage = () => {
                   {/* LEFT SIDE */}
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <Code2Icon className="w-3 h-3 sm:w-6 sm:h-6 text-primary" />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <Code2Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                       </div>
 
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h2 className="text-base sm:text-xl font-bold">{problem.title}</h2>
+                          <h2 className="text-sm sm:text-base font-medium leading-tight">
+                            {problem.title}
+                          </h2>
                           <span
                             className={`badge badge-sm text-xs sm:text-sm ${getDifficultyBadgeClass(problem.difficulty)}`}
                           >
