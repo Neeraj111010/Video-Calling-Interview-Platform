@@ -17,7 +17,7 @@ const ProblemsPage = () => {
       <div className="max-w-6xl mx-auto px-4 py-12">
         {/* HEADER */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Practice Problems</h1>
+          <h1 className="text-3xl font-bold mb-2">Practice Problems</h1>
           <p className="text-base-content/70">
             Sharpen your coding skills with curated problems
           </p>
